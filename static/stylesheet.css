@@ -1,0 +1,261 @@
+
+body {
+  /*font-family: 'Raleway', sans-serif;*/
+  font-family: 'Lato', sans-serif;
+  /*font-family: "Helvetica Neue", HelveticaNeue, Arial, sans-serif;*/
+  color: #444;
+  background-color: #FAFAFA;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 60px;
+  margin-bottom: 18px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+h2 {
+  text-align: center;
+  margin-top: 32px;
+  margin-bottom: 32px;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 30px;
+}
+
+footer {
+  position: absolute;
+  left:0;
+  height: 60px;
+  width: 100%;
+  margin-top: 48px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  color:white;
+  padding-left: 12px;
+  background-color: #979797;
+
+}
+
+/* --- clean footer --- */
+/*footer {
+  height: 60px;
+  width: 801px;
+  border-top: 1px solid #979797;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0px;
+  vertical-align: middle;
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+}*/
+/* --- clean footer --- */
+
+a.footer {
+  color: white;
+}
+
+div.bar {
+    display: inline-block;
+    width: 20px;
+    height: 75px;   /* We'll override height later */
+    background-color: teal;
+}
+
+.container {
+  width: 1001px;
+  margin: auto;
+  position:relative;
+  align-items: center;
+  text-align: center;
+}
+
+.language_box {
+  width: 250px;
+  height: 160px;
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  display: inline-block;
+  margin: 6px;
+  text-align: center;
+}
+
+.language_box:hover {
+  background: #A9FBD7;
+  border: 1px solid #43CEAF;
+  cursor: pointer;
+}
+
+.language_box:active {
+  background: #D5FFED;
+}
+
+.language_name {
+  font-weight: 700;
+  max-width: 220px;
+  font-size: 24px;
+  margin-bottom: 12px;
+  margin-top: 18px;
+  display: inline-block;
+}
+
+.percent {
+  /*font-weight: 700;*/
+  max-width: 220px;
+  font-size: 16px;
+  display: inline-block;
+}
+
+.language_info {
+  max-width: 440px;
+  font-size: 16px;
+  /*margin-bottom: 6px;*/
+  display: inline-block;
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  color: #8c8c8c;
+
+}
+
+.footer_text {
+  line-height: 60px;
+  font-size: 14px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+}
+
+.highlight {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255,255,255,0.85);
+  position: fixed;
+  margin: 0px;
+  padding: 0px;
+  z-index: 90;
+  top: 0;
+  left:0;
+  bottom: 0;
+  /*text-align: center;*/
+}
+
+.big_language_box {
+  width: 500px;
+  /*height: 344px;*/
+  margin: 0% auto auto auto;
+  /*background: #F6F6F6;*/
+  /*border: 1px solid #979797;*/
+  border-radius: 3px;
+  display: block;
+  padding-left: 36px;
+  padding-right: 36px;
+  padding-top: 32px;
+  /*box-shadow: 4px 4px 2px 0px rgba(0,0,0,0.25);*/
+  z-index: 100;
+}
+
+.highlight_header {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: block;
+  text-align: center;
+}
+
+.highlight_red {
+  background-color: #FF3C54;
+  color: white;
+  font-size: 18px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  padding-left: 12px;
+  width: 285px;
+  margin-bottom: 6px;
+  margin-top: 16px;
+}
+
+.highlight_green {
+  background-color: #B4EE78;
+  color: white;
+  font-size: 18px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  padding-left: 12px;
+  width: 285px;
+  margin-bottom: 6px;
+  margin-top: 16px;
+}
+
+.highlight_learn_title {
+  color: #4A90E2;
+  font-size: 18px;
+  /*padding-top: 16px;*/
+  /*padding-bottom: 16px;*/
+  /*padding-left: 12px;*/
+  width: 285px;
+  margin-bottom: 6px;
+  margin-top: 16px;
+  /*border: 1px solid #4A90E2;*/
+}
+
+.highlight_code_title {
+
+}
+
+.highlight_code_title {
+
+}
+
+.big_wiki {
+  font-size: 16px;
+  line-height: 22px;
+  /*max-width: 180px;*/
+}
+
+.big_wiki_link {
+  font-size: 12px;
+  font-style: italic;
+  color: blue;
+}
+
+.close {
+  float: right;
+  font-size: 13px;
+  color: #8C8C8C;
+  background-color: white;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 2px;
+  border-color: #8C8C8C;
+}
+
+.close:hover{
+  background-color: #444;
+  border-color: #444;
+  color: white;
+  cursor: pointer;
+}
+
+.close:active{
+  background-color: #8C8C8C;
+  border-color: #444;
+}
+
+.youtube {
+  width: 300px;
+  height: 170px;
+  background-color: #979797;
+  display: inline-block;
+  /*margin-left: 12px;*/
+  /*margin-right: 24px;*/
+  /*float: right;*/
+}
+
+.text {
+  display: inline;
+}
