@@ -6,7 +6,7 @@
 // > use object on script file to draw everything
 //
 // (*) for route /<lang> --> show clicked state of this specific language
-//
+// asdfaskdjfasdklm asdm,f asdf
 // (*) think about changing the layout and the ux
 
 var express = require('express');
