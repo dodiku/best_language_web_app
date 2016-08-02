@@ -4,8 +4,10 @@
   "description": "A single web application showing which programming language is best one to start learning today. Data is based on GitHub and Stackoverflow APIs.",
   "main": "app.js",
   "dependencies": {
+    "ejs": "^2.5.1",
     "express": "^4.14.0",
-    "morgan": "^1.7.0"
+    "morgan": "^1.7.0",
+    "request": "^2.74.0"
   },
   "devDependencies": {},
   "scripts": {
