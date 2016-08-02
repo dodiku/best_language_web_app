@@ -28,9 +28,13 @@ app.set('view engine', 'html');
 
 
 // TEMP DATABASE
-var dataArray = [];
-var langNum = 10; // number of languages to handled
+var dataArray = {
+  "github_last_update":0,
+  "stackoverflow_last_update":0,
+  "data":[],
+};
 
+var langNum = 10; // number of languages to handled
 
 
 
@@ -55,6 +59,77 @@ function timeForApi(){
 }
 
 
+// getting data from GitHub
+function GitHubCallback (error, response, body) {
+  console.log("GETTING DATA FROM GITHUB: ATTEMPTING...");
+  // console.log(JSON.parse(body));
+  if (!error && response.statusCode == 200) {
+    console.log("GETTING DATA FROM GITHUB: SUCCEEDED :)");
+
+    var gitData = JSON.parse(body);
+    var repositories = gitData.items;
+    var tempArray = [];
+    // res.json(gitData);
+
+    // COUNTING NUMBER OF NEW GITHUB REPOSITORIES PER LANGUAGE
+    for (var i = 0; i < repositories.length; i++){
+      var language = repositories[i].language;
+      var exists = 0;
+      if (language === null){
+        continue;
+      }
+
+      for (var n = 0; n < tempArray.length; n++) {
+        if (tempArray[n].name == language) {
+          tempArray[n].repos++;
+          exists = 1;
+          continue;
+        }
+      }
+
+      if(exists === 0) {
+        tempArray.push({
+          name: language,
+          repos: 1
+        });
+      }
+
+    }
+
+    var sumRepositories = 0;
+    for (i = 0; i < tempArray.length; i++){
+      sumRepositories = sumRepositories + tempArray[i].repos;
+    }
+
+    for (i = 0; i < tempArray.length; i++){
+      tempArray[i].repos_percent = Math.round(tempArray[i].repos / sumRepositories * 100);
+    }
+
+    tempArray = tempArray.sort(compareForSort);
+    dataArray.data = tempArray;
+
+
+  }
+  else if (error){
+    console.error(error);
+  }
+  else {
+    console.error("GETTING DATA FROM GITHUB: FAILED :(");
+    res.end();
+  }
+}
+
+// sorting arrat according to the number of new repositories
+function compareForSort(a,b){
+  if (a.repos == b.repos)
+    return 0;
+  if (a.repos > b.repos)
+    return -1;
+  else
+    return 1;
+}
+
+
 
 
 
@@ -64,63 +139,34 @@ app.get('/',function(req, res){
   var time = timeForApi();
 
   var options = {
-    url: "http://api.github.com/search/repositories?per_page=1000&sort=stars&q=+created:>"+time,
+    url: "http://api.github.com/search/repositories?per_page=1000&sort=stars&q=+created:"+time,
     headers: {
       'User-Agent': 'best_language_web_app'
       }
   };
+  Request(options, GitHubCallback);
+  dataArray.github_last_update = time;
+  // dataArray.data = dataArray.data.sort(compareForSort);
+  res.json(dataArray);
 
-  function callback (error, response, body) {
-    console.log("GETTING DATA FROM GITHUB: ATTEMPTING...");
-    // console.log(JSON.parse(body));
-    if (!error && response.statusCode == 200) {
-      console.log("GETTING DATA FROM GITHUB: SUCCEEDED :)");
-
-      var gitData = JSON.parse(body);
-      var repositories = gitData.items;
-      // res.json(gitData);
-
-      // COUNTING NUMBER OF NEW GITHUB REPOSITORIES PER LANGUAGE
-      for (var i = 0; i < repositories.length; i++){
-
-        var language = repositories[i].language;
-        var exists = 0;
-
-        if (language === null){
-          continue;
-        }
-
-        for (var n = 0; n < dataArray.length; n++) {
-          if (dataArray[n].name == language) {
-            dataArray[n].repos++;
-            exists = 1;
-            continue;
-          }
-        }
-
-        if(exists === 0 && dataArray.length < langNum) {
-          dataArray.push({
-            name: language,
-            repos: 1
-          });
-        }
-
-      }
-
-      res.json(dataArray);
+  // if (time === dataArray.github_last_update) {
+  //   var options = {
+  //     url: "http://api.github.com/search/repositories?per_page=1000&sort=stars&q=+created:"+time,
+  //     headers: {
+  //       'User-Agent': 'best_language_web_app'
+  //       }
+  //   };
+  //   Request(options, GitHubCallback);
+  //   dataArray.github_last_update = time;
+  //   dataArray = dataArray.data.sort(compareForSort);
+  // }
+  // else {
+  //   console.log("date is the same..");
+  // }
+  //
+  // res.json(dataArray);
 
 
-    }
-    else if (error){
-      console.error(error);
-    }
-    else {
-      console.error("GETTING DATA FROM GITHUB: FAILED :(");
-      res.end();
-    }
-  }
-
-  Request(options, callback);
 
   // set up url
 
