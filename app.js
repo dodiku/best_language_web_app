@@ -98,7 +98,6 @@ app.get('/',function(req, res){
       console.log("GETTING DATA FROM GITHUB: ATTEMPTING...");
 
       if (!error && response.statusCode == 200) {
-        console.log("GETTING DATA FROM GITHUB: SUCCEEDED :)");
         var gitData = JSON.parse(body);
         var repositories = gitData.items;
         var tempArray = [];
@@ -139,6 +138,8 @@ app.get('/',function(req, res){
 
         tempArray = tempArray.sort(compareForSort);
         dataArray.data = tempArray;
+
+        console.log("GETTING DATA FROM GITHUB: SUCCEEDED. RECEIVED " + sumRepositories + " VALID RESULTS OUT OF " + repositories.length + ".");
 
       }
       else if (error){
