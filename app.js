@@ -14,8 +14,9 @@ var app = express();
 var logger = require('morgan');
 var Request = require('request');
 
-
+// *************************
 // CONFIGURATIONS
+// *************************
 app.use(logger('dev'));
 
 // app.set("views", __dirname + '/views');
@@ -25,9 +26,9 @@ app.set('view engine', 'html');
 // app.use(express.static( __dirname + '/static' ));
 
 
-
-
+// *************************
 // TEMP DATABASE
+// *************************
 var dataArray = {
   "github_last_update":0,
   "stackoverflow_last_update":0,
@@ -37,8 +38,9 @@ var dataArray = {
 var langNum = 10; // number of languages to handled
 
 
-
+// *************************
 // USEFUL FUNCTIONS
+// *************************
 function timeForApi(){
   var yesterday = new Date();
   var dd = yesterday.getDate()-1; //today - 1 = yesterday
@@ -59,65 +61,7 @@ function timeForApi(){
 }
 
 
-// getting data from GitHub
-function GitHubCallback (error, response, body) {
-  console.log("GETTING DATA FROM GITHUB: ATTEMPTING...");
-  // console.log(JSON.parse(body));
-  if (!error && response.statusCode == 200) {
-    console.log("GETTING DATA FROM GITHUB: SUCCEEDED :)");
 
-    var gitData = JSON.parse(body);
-    var repositories = gitData.items;
-    var tempArray = [];
-    // res.json(gitData);
-
-    // COUNTING NUMBER OF NEW GITHUB REPOSITORIES PER LANGUAGE
-    for (var i = 0; i < repositories.length; i++){
-      var language = repositories[i].language;
-      var exists = 0;
-      if (language === null){
-        continue;
-      }
-
-      for (var n = 0; n < tempArray.length; n++) {
-        if (tempArray[n].name == language) {
-          tempArray[n].repos++;
-          exists = 1;
-          continue;
-        }
-      }
-
-      if(exists === 0) {
-        tempArray.push({
-          name: language,
-          repos: 1
-        });
-      }
-
-    }
-
-    var sumRepositories = 0;
-    for (i = 0; i < tempArray.length; i++){
-      sumRepositories = sumRepositories + tempArray[i].repos;
-    }
-
-    for (i = 0; i < tempArray.length; i++){
-      tempArray[i].repos_percent = Math.round(tempArray[i].repos / sumRepositories * 100);
-    }
-
-    tempArray = tempArray.sort(compareForSort);
-    dataArray.data = tempArray;
-
-
-  }
-  else if (error){
-    console.error(error);
-  }
-  else {
-    console.error("GETTING DATA FROM GITHUB: FAILED :(");
-    res.end();
-  }
-}
 
 // sorting arrat according to the number of new repositories
 function compareForSort(a,b){
@@ -129,11 +73,9 @@ function compareForSort(a,b){
     return 1;
 }
 
-
-
-
-
+// *************************
 // ROUTERS
+// *************************
 app.get('/',function(req, res){
 
   var time = timeForApi();
@@ -144,39 +86,74 @@ app.get('/',function(req, res){
       'User-Agent': 'best_language_web_app'
       }
   };
-  Request(options, GitHubCallback);
-  dataArray.github_last_update = time;
-  // dataArray.data = dataArray.data.sort(compareForSort);
-  res.json(dataArray);
+  console.log("dataArray.github_last_update: " + dataArray.github_last_update);
+  console.log("time: " + time);
 
-  // if (time === dataArray.github_last_update) {
-  //   var options = {
-  //     url: "http://api.github.com/search/repositories?per_page=1000&sort=stars&q=+created:"+time,
-  //     headers: {
-  //       'User-Agent': 'best_language_web_app'
-  //       }
-  //   };
-  //   Request(options, GitHubCallback);
-  //   dataArray.github_last_update = time;
-  //   dataArray = dataArray.data.sort(compareForSort);
-  // }
-  // else {
-  //   console.log("date is the same..");
-  // }
-  //
-  // res.json(dataArray);
+  // getting data from GitHub
+  if (dataArray.github_last_update !== time) {
+    console.log("GITHUB DATA IS NOT UP-TO-DATE: GETTING FRESH DATA...");
+    Request(options, function (error, response, body) {
+      console.log("GETTING DATA FROM GITHUB: ATTEMPTING...");
+      // console.log(JSON.parse(body));
+      if (!error && response.statusCode == 200) {
+        console.log("GETTING DATA FROM GITHUB: SUCCEEDED :)");
 
+        var gitData = JSON.parse(body);
+        var repositories = gitData.items;
+        var tempArray = [];
 
+        // COUNTING NUMBER OF NEW GITHUB REPOSITORIES PER LANGUAGE
+        for (var i = 0; i < repositories.length; i++){
+          var language = repositories[i].language;
+          var exists = 0;
+          if (language === null){
+            continue;
+          }
 
-  // set up url
+          for (var n = 0; n < tempArray.length; n++) {
+            if (tempArray[n].name == language) {
+              tempArray[n].repos++;
+              exists = 1;
+              continue;
+            }
+          }
 
-  // get data from github
+          if(exists === 0) {
+            tempArray.push({
+              name: language,
+              repos: 1
+            });
+          }
+        }
 
-  // get data from stackoverflow
+        var sumRepositories = 0;
+        for (i = 0; i < tempArray.length; i++){
+          sumRepositories = sumRepositories + tempArray[i].repos;
+        }
 
-  // render view with data object
-  // res.sendFile( path.join( __dirname, 'static', 'index.html' ));
-  // console.log("Served index.html successfully");
+        for (i = 0; i < tempArray.length; i++){
+          tempArray[i].repos_percent = Math.round(tempArray[i].repos / sumRepositories * 100);
+        }
+
+        tempArray = tempArray.sort(compareForSort);
+        dataArray.data = tempArray;
+
+      }
+      else if (error){
+        console.error(error);
+      }
+      else {
+        console.error("GETTING DATA FROM GITHUB: FAILED :(");
+        res.end();
+      }
+      dataArray.github_last_update = time;
+      res.json(dataArray);
+    });
+  }
+  else {
+    console.log("GITHUB DATA IS UP-TO-DATE: USING EXISTING DATA!");
+    res.json(dataArray);
+  }
 });
 
 app.get("*", function(req, res){
