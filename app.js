@@ -89,20 +89,21 @@ app.get('/',function(req, res){
   console.log("dataArray.github_last_update: " + dataArray.github_last_update);
   console.log("time: " + time);
 
-  // getting data from GitHub
+  // checking to see if data is up-to-date
   if (dataArray.github_last_update !== time) {
     console.log("GITHUB DATA IS NOT UP-TO-DATE: GETTING FRESH DATA...");
+
+    // getting data from github
     Request(options, function (error, response, body) {
       console.log("GETTING DATA FROM GITHUB: ATTEMPTING...");
-      // console.log(JSON.parse(body));
+
       if (!error && response.statusCode == 200) {
         console.log("GETTING DATA FROM GITHUB: SUCCEEDED :)");
-
         var gitData = JSON.parse(body);
         var repositories = gitData.items;
         var tempArray = [];
 
-        // COUNTING NUMBER OF NEW GITHUB REPOSITORIES PER LANGUAGE
+        // counting number of new repositories per lnaguage
         for (var i = 0; i < repositories.length; i++){
           var language = repositories[i].language;
           var exists = 0;
@@ -126,6 +127,7 @@ app.get('/',function(req, res){
           }
         }
 
+        // calculating repos_percent out of total new repositories per language
         var sumRepositories = 0;
         for (i = 0; i < tempArray.length; i++){
           sumRepositories = sumRepositories + tempArray[i].repos;
