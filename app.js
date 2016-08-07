@@ -311,6 +311,18 @@ app.get("/api/all", function(req, res){
 	});
 });
 
+app.get('/:word', function(req, res){
+  var language = req.params.word;
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  language = capitalizeFirstLetter(language);
+
+  res.render('lang', {language: language});
+});
+
 app.get("*", function(req, res){
 	res.send('Ooops.. nothing here.');
 });
