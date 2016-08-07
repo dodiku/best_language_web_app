@@ -139,7 +139,6 @@ function drawData (dataArray){
                        var radius = rScale(d.repos_percent);
                        var border = bScale(d.questions_percent);
                        radius = radius + border;
-                       console.log(radius);
                        return radius;
                      })
                      .style("opacity", 0.5)

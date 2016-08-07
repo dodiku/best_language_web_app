@@ -26,9 +26,42 @@ function addDataToPage(array){
   // cleaning the container
   $("#container").html("");
 
-  for (var i = 0; i < array.length; i++){
-    var languageBox = "<a style='color:#222;display:inline-block;' href='/" + array[i].name + "'><div class="+"language_box"+">";
+  // creating scales
+  // getting repos values
+
+  var hottest = 0;
+  var hotLang = "";
+  var coldest = 10000;
+  var colLang = "";
+
+  for (var i = 0 ; i < array.length ; i++){
+    if (hottest < (array[i].repos_percent) * (array[i].questions_percent)){
+      hottest = (array[i].repos_percent * array[i].questions_percent);
+      hotLang = array[i].name;
+    }
+    else if (coldest > (array[i].repos_percent * array[i].questions_percent)) {
+      coldest = (array[i].repos_percent * array[i].questions_percent);
+      colLang = array[i].name;
+    }
+  }
+
+  console.log("hottest is - " + hotLang + " - " + hottest);
+  console.log("coldest is - " + colLang + " - " + coldest);
+
+  var colorScale = d3.scaleLinear()
+                  .domain([coldest, hottest])
+                  // .range(["rgba(199,227,249,0.5)", "rgba(255,0,0,0.5)"]);
+                  // .range(["#ffffff","#28C2FF"]);
+                  // .range(["#ffffff","#5ED1FF"]);
+                  .range(["#ffffff","#FFF07C"]);
+
+                  // .range(["white","gray","black"]);
+
+  for (i = 0; i < array.length; i++){
+    var backColor = colorScale((array[i].repos_percent * array[i].questions_percent));
+    // var languageBox = "<a style='color:#222;display:inline-block;' href='/" + array[i].name + "'><div style='background-color:'"+backColor+";'class="+"language_box"+">";
     // var languageBox = "<div class="+"language_box"+">";
+    var languageBox = '<a style="color:#222;display:inline-block;" href="/' + array[i].name + '"><div style="background-color:'  + backColor + ';" class=language_box>';
     languageBox = languageBox + '<span class="language_name">'+array[i].name+'</span></br>';
     languageBox = languageBox + '<span class="percent">'+array[i].repos_percent+'%</span></br>';
     languageBox = languageBox + '<span class="language_info">of new repositories on GitHub</span></br>';
