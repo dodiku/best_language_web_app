@@ -13,8 +13,8 @@ function getData(){
       console.log("Got the data from the server:");
       data = data.data;
       console.log(data);
-      // drawData(data);
-      addDataToPage(data);
+      drawData(data);
+      // addDataToPage(data);
     }
   });
 
@@ -27,8 +27,7 @@ function addDataToPage(array){
   $("#container").html("");
 
   for (var i = 0; i < array.length; i++){
-    var languageBox = "<a style='color:#222;display:inline-block;' href='/" + array[i].name + "'><div class="+"language_box"+">";
-    // var languageBox = "<div class="+"language_box"+">";
+    var languageBox = "<a style='color:#222;' href='/" + array[i].name + "'><div class="+"language_box"+">";
     languageBox = languageBox + '<span class="language_name">'+array[i].name+'</span></br>';
     languageBox = languageBox + '<span class="percent">'+array[i].repos_percent+'%</span></br>';
     languageBox = languageBox + '<span class="language_info">of new repositories on GitHub</span></br>';
@@ -140,6 +139,7 @@ function drawData (dataArray){
                        var radius = rScale(d.repos_percent);
                        var border = bScale(d.questions_percent);
                        radius = radius + border;
+                       console.log(radius);
                        return radius;
                      })
                      .style("opacity", 0.5)
@@ -161,10 +161,10 @@ function drawData (dataArray){
                       //  }
 
                      })
-                     .attr("cx", function(d, i) {
+                     .attr("cx", function(d) {
                       return width/2;
                      })
-                     .attr("cy", function(d, i) {
+                     .attr("cy", function(d) {
                       var border = bScale(d.questions_percent);
                       var radius = rScale(d.repos_percent);
                       radius = radius + border;

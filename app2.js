@@ -167,7 +167,7 @@ function getStackOverflowData(tempArray, lang, i){
       if (!error && response.statusCode == 200) {
         var langStackQuestions = JSON.parse(body);
         var total = langStackQuestions.total;
-        tempArray[i].questions = total;
+        tempArray[i].questions = total + 1;
         console.log("GETTING DATA FROM STACKOVERFLOW: SUCCEEDED :) [" + lang + " :"+ total + "]");
         console.log("[3]request return:" + total);
         // return total;
@@ -176,14 +176,14 @@ function getStackOverflowData(tempArray, lang, i){
       else if (error){
         console.log(error);
         // reject(Error(error));
-        tempArray[i].questions = Math.random() * 100;
+        tempArray[i].questions = Math.random() * 100 + 1;
         tempArray[i].questions_num_is_random = true;
         resolve(tempArray);
       }
       else {
         console.log("GETTING DATA FROM STACKOVERFLOW: FAILED :( [" + lang + "]");
         // reject(Error("GETTING DATA FROM STACKOVERFLOW: FAILED :( [" + lang + "]"));
-        tempArray[i].questions = Math.random() * 100;
+        tempArray[i].questions = Math.random() * 100 + 1;
         tempArray[i].questions_num_is_random = true;
         resolve(tempArray);
       }
@@ -255,6 +255,10 @@ app.get('/', function(req, res){
   res.render('index', {page: 'get all data'});
 });
 
+app.get('/circles', function(req, res){
+  res.render('index_circles', {page: 'get all data'});
+});
+
 app.get('/api/yesterday',function(req, res){
 
   var time = timeForApi();
@@ -309,5 +313,5 @@ app.get("*", function(req, res){
 	res.send('Ooops.. nothing here.');
 });
 
-app.listen(3000);
-console.log("App is served on localhost:3000");
+app.listen(3333);
+console.log("App is served on localhost:3333");
