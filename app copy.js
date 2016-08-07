@@ -61,63 +61,30 @@ function compareForSort(a,b){
     return 1;
 }
 
-function returnValue(res, tempArray){
-  console.log("[4]function return:" + tempArray);
-  // return data;
-  res.json(tempArray);
-}
-
-// function gettingTotalNumber(stackURL, lang){
-//   Request({method: 'GET', uri: stackURL, gzip: true}, function (error, response, body) {
-//     if (!error && response.statusCode == 200) {
-//       // console.log(body);
-//       // console.log(response.headers['content-type']);
-//       // console.log(JSON.parse(body.total));
-//
-//       // var langStackQuestions = body;
-//       // var gunzip = zlib.createGunzip();
-//       // body.pipe(gunzip);
-//       // console.log("this is gunzip: " +gunzip.total);
-//       console.log('server encoded the data as: ' + (response.headers['content-encoding'] || 'identity'));
-//       console.log("this is body: " + body);
-//       var langStackQuestions = JSON.parse(body);
-//       console.log("body is a: " + typeof langStackQuestions);
-//       console.log(langStackQuestions);
-//       // langStackQuestions = body.total;
-//
-//
-//       // total = langStackQuestions.total;
-//       total = langStackQuestions.total;
-//       // total = body.total;
-//       console.log(total);
-//       console.log("GETTING DATA FROM STACKOVERFLOW: SUCCEEDED :) [" + lang + " :"+ total + "]");
-//       // var questions = total;
-//       console.log("[3]request return:" + total);
-//       return total;
-//     }
-//
-//     else if (error){
-//       console.error(error);
-//     }
-//     else {
-//       console.error("GETTING DATA FROM STACKOVERFLOW: FAILED :( [" + lang + "]");
-//       return total;
-//     }
-//   });
-// }
-
 // getting data from stackoverflow for a single language
-function requestStackoverflowAPI(tempArray, lang, time, i) {
+function requestStackoverflowAPI(lang, time) {
 
   var stackURL = "https://api.stackexchange.com/2.2/questions/?filter=total&fromdate="+time+"&site=stackoverflow&tagged="+lang;
-  // var questions = 0;
   // var stackURL = 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=computers';
   console.log("Stackoverflow URL: " + stackURL);
   var total = 0;
 
-  // var headers = {
-  //     'Accept-Encoding': 'gzip'
-  //   };
+  var headers = {
+      'Accept-Encoding': 'gzip'
+    };
+
+  // var options = {
+  //   url: stackURL,
+  //   // encoding: 'utf-8',
+  //   'headers':
+  //   'Accept-Encoding': 'gzip',
+  // };
+  //
+  // Request({url:'http://localhost:8000/', 'headers': headers})
+  //       .pipe(zlib.createGunzip()) // unzip
+  //       .pipe(process.stdout);
+
+
 
   Request({method: 'GET', uri: stackURL, gzip: true}, function (error, response, body) {
     if (!error && response.statusCode == 200) {
@@ -142,10 +109,7 @@ function requestStackoverflowAPI(tempArray, lang, time, i) {
       // total = body.total;
       console.log(total);
       console.error("GETTING DATA FROM STACKOVERFLOW: SUCCEEDED :) [" + lang + " :"+ total + "]");
-      questions = total;
-      console.log("[3]request return:" + total);
-      tempArray[i].questions = questions;
-      // return total;
+      return total;
     }
 
     else if (error){
@@ -156,44 +120,6 @@ function requestStackoverflowAPI(tempArray, lang, time, i) {
       return total;
     }
   });
-
-
-  // function returnValue(data){
-  //   console.log("[4]function return:" + data);
-  //   return data;
-  // }
-
-  // returnValue(data, gettingTotalNumber);
-  var thevalue = 0;
-  function a(value){
-    thevalue = value;
-    console.log("[4]");
-    console.log(value);
-    console.log("[*]");
-  }
-
-  // gettingTotalNumber(stackURL, lang, returnValue());
-
-
-  // return gettingTotalNumber(stackURL, lang);
-
-
-
-  // var options = {
-  //   url: stackURL,
-  //   // encoding: 'utf-8',
-  //   'headers':
-  //   'Accept-Encoding': 'gzip',
-  // };
-  //
-  // Request({url:'http://localhost:8000/', 'headers': headers})
-  //       .pipe(zlib.createGunzip()) // unzip
-  //       .pipe(process.stdout);
-
-
-
-
-
 }
 
 // *************************
@@ -261,45 +187,32 @@ app.get('/api/yesterday',function(req, res){
       var questions = 0;
       // for (i = 0; i < tempArray.length; i++){
 
+      for (i = 0; i < 1; i++){
+        var lang = tempArray[i].name;
+        console.log("lang is: " + lang);
+        questions = requestStackoverflowAPI(lang, time);
+        console.log("number of questions is: " + questions);
+        tempArray[i].questions = questions;
+        // console.log("adddddeeeedddd:");
+        console.log(tempArray[i]);
+      }
 
+      
 
-      var a = function(tempArray){
-        console.log("[1]===starting to looopp======");
-        for (i = 0; i < 1; i++){
-          var lang = tempArray[i].name;
-          console.log("[2]lang is: " + lang);
-          // questions = requestStackoverflowAPI(lang, time, tempArray, i);
-          returnValue(res, tempArray, requestStackoverflowAPI(tempArray, lang, time, i));
-          console.log("[5]number of questions is: " + questions);
-          // tempArray[i].questions = questions; //// doing that inside requestStackoverflowAPI
-        }
-        // return tempArray;
-      };
+      // summing up the number of questions
+      var sumQuestions = 0;
+      for (i = 0; i < tempArray.length; i++){
+        sumQuestions = sumQuestions + tempArray[i].questions;
+      }
 
-      var b = function(tempArray){
-        console.log('[6]this is the array before sending it: ');
-        console.log(tempArray);
-        res.json(tempArray);
-      };
+      // calculating questions_percent
+      for (i = 0; i < tempArray.length; i++){
+        tempArray[i].questions_percent = Math.round(tempArray[i].questions / sumQuestions * 100);
+      }
 
-      b(tempArray, a(tempArray));
-      // setTimeout(b, 1000);
-
-
-      // // summing up the number of questions
-      // var sumQuestions = 0;
-      // for (i = 0; i < tempArray.length; i++){
-      //   sumQuestions = sumQuestions + tempArray[i].questions;
-      // }
-      //
-      // // calculating questions_percent
-      // for (i = 0; i < tempArray.length; i++){
-      //   tempArray[i].questions_percent = Math.round(tempArray[i].questions / sumQuestions * 100);
-      // }
-      //
-      // // returning data
-      // console.log("returning tempArray");
-      // res.json(tempArray);
+      // returning data
+      console.log("returning tempArray");
+      res.json(tempArray);
 
     }
     else if (error){
