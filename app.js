@@ -2,33 +2,39 @@ var express = require('express');
 var app = express();
 var logger = require('morgan');
 var Request = require('request');
-var zlib = require("zlib");
+
 
 // *************************
 // CONFIGURATIONS
 // *************************
 app.use(logger('dev'));
 
-// app.set("views", __dirname + '/views');
+app.set("views", __dirname + '/views');
 app.engine('.html', require('ejs').__express);
 app.set('view engine', 'html');
-
-// app.use(express.static( __dirname + '/static' ));
+app.use(express.static( __dirname + '/public' ));
 
 
 // *************************
 // TEMP DATABASE
 // *************************
 var dataArray = {
-  "last_update":0,
+  "update_date":0,
   "data":[],
 };
 
 var langNum = 10; // number of languages to handled
 
 
+var cloudant_USER = 'dodiku';
+var cloudant_DB = 'best_programming_lang';
+var cloudant_KEY = 'themaytolondisenceirtioc';
+var cloudant_PASSWORD = 'ae4e1b81ed72fc3d42f04008c154198d8c6ce315';
+
+var cloudant_URL = "https://" + cloudant_USER + ".cloudant.com/" + cloudant_DB;
+
 // *************************
-// USEFUL FUNCTIONS
+// FUNCTIONS
 // *************************
 
 // returning a string that represnts time in the correct format for API calls
@@ -61,264 +67,251 @@ function compareForSort(a,b){
     return 1;
 }
 
-function returnValue(res, tempArray){
-  console.log("[4]function return:" + tempArray);
-  // return data;
-  res.json(tempArray);
-}
+// return an array with github data
+function getGitHubData(){
+  console.log("[1]in github function");
 
-// function gettingTotalNumber(stackURL, lang){
-//   Request({method: 'GET', uri: stackURL, gzip: true}, function (error, response, body) {
-//     if (!error && response.statusCode == 200) {
-//       // console.log(body);
-//       // console.log(response.headers['content-type']);
-//       // console.log(JSON.parse(body.total));
-//
-//       // var langStackQuestions = body;
-//       // var gunzip = zlib.createGunzip();
-//       // body.pipe(gunzip);
-//       // console.log("this is gunzip: " +gunzip.total);
-//       console.log('server encoded the data as: ' + (response.headers['content-encoding'] || 'identity'));
-//       console.log("this is body: " + body);
-//       var langStackQuestions = JSON.parse(body);
-//       console.log("body is a: " + typeof langStackQuestions);
-//       console.log(langStackQuestions);
-//       // langStackQuestions = body.total;
-//
-//
-//       // total = langStackQuestions.total;
-//       total = langStackQuestions.total;
-//       // total = body.total;
-//       console.log(total);
-//       console.log("GETTING DATA FROM STACKOVERFLOW: SUCCEEDED :) [" + lang + " :"+ total + "]");
-//       // var questions = total;
-//       console.log("[3]request return:" + total);
-//       return total;
-//     }
-//
-//     else if (error){
-//       console.error(error);
-//     }
-//     else {
-//       console.error("GETTING DATA FROM STACKOVERFLOW: FAILED :( [" + lang + "]");
-//       return total;
-//     }
-//   });
-// }
+  return new Promise(function(resolve, reject) {
+    var time = timeForApi();
+    var tempArray = [];
 
-// getting data from stackoverflow for a single language
-function requestStackoverflowAPI(tempArray, lang, time, i) {
+    var options = {
+      url: "http://api.github.com/search/repositories?per_page=1000&sort=stars&q=+created:"+time,
+      headers: {
+        'User-Agent': 'best_language_web_app'
+        }
+    };
 
-  var stackURL = "https://api.stackexchange.com/2.2/questions/?filter=total&fromdate="+time+"&site=stackoverflow&tagged="+lang;
-  // var questions = 0;
-  // var stackURL = 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=computers';
-  console.log("Stackoverflow URL: " + stackURL);
-  var total = 0;
+    Request(options, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        var gitData = JSON.parse(body);
+        var repositories = gitData.items;
+        var countMax = langNum;
+        var countActual = 1;
 
-  // var headers = {
-  //     'Accept-Encoding': 'gzip'
-  //   };
+        // counting number of new repositories per lnaguage
+        for (var i = 0; i < repositories.length; i++){
+          var language = repositories[i].language;
+          var exists = 0;
+          if (language === null){
+            continue;
+          }
 
-  Request({method: 'GET', uri: stackURL, gzip: true}, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      // console.log(body);
-      // console.log(response.headers['content-type']);
-      // console.log(JSON.parse(body.total));
+          for (var n = 0; n < tempArray.length; n++) {
+            if (tempArray[n].name == language) {
+              tempArray[n].repos++;
+              exists = 1;
+              continue;
+            }
+          }
 
-      // var langStackQuestions = body;
-      // var gunzip = zlib.createGunzip();
-      // body.pipe(gunzip);
-      // console.log("this is gunzip: " +gunzip.total);
-      console.log('server encoded the data as: ' + (response.headers['content-encoding'] || 'identity'));
-      console.log("this is body: " + body);
-      var langStackQuestions = JSON.parse(body);
-      console.log("body is a: " + typeof langStackQuestions);
-      console.log(langStackQuestions);
-      // langStackQuestions = body.total;
+          if(exists === 0 && countActual <= countMax) {
+            tempArray.push({
+              name: language,
+              repos: 1
+            });
+            countActual = countActual + 1;
+
+          }
+        }
+
+        // summarizing github repos
+        var sumRepositories = 0;
+        for (i = 0; i < tempArray.length; i++){
+          sumRepositories = sumRepositories + tempArray[i].repos;
+        }
+
+        // calculating repos_percent
+        for (i = 0; i < tempArray.length; i++){
+          tempArray[i].repos_percent = Math.round(tempArray[i].repos / sumRepositories * 100);
+        }
+
+        // sorting the array
+        tempArray = tempArray.sort(compareForSort);
+
+        // done with github
+        console.log("[2]GETTING DATA FROM GITHUB: SUCCEEDED. RECEIVED " + sumRepositories + " VALID RESULTS OUT OF " + repositories.length + ".");
+
+        // return tempArray;
+        resolve(tempArray);
 
 
-      // total = langStackQuestions.total;
-      total = langStackQuestions.total;
-      // total = body.total;
-      console.log(total);
-      console.error("GETTING DATA FROM STACKOVERFLOW: SUCCEEDED :) [" + lang + " :"+ total + "]");
-      questions = total;
-      console.log("[3]request return:" + total);
-      tempArray[i].questions = questions;
-      // return total;
-    }
+      }
+      else if (error){
+        console.error(error);
+        // return tempArray;
+        reject(Error(error));
+      }
+      else {
+        console.error("GETTING DATA FROM GITHUB: FAILED");
+        // return tempArray;
+        reject(Error("GETTING DATA FROM GITHUB: FAILED"));
+      }
 
-    else if (error){
-      console.error(error);
-    }
-    else {
-      console.error("GETTING DATA FROM STACKOVERFLOW: FAILED :( [" + lang + "]");
-      return total;
-    }
+    });
   });
 
 
-  // function returnValue(data){
-  //   console.log("[4]function return:" + data);
-  //   return data;
-  // }
-
-  // returnValue(data, gettingTotalNumber);
-  var thevalue = 0;
-  function a(value){
-    thevalue = value;
-    console.log("[4]");
-    console.log(value);
-    console.log("[*]");
-  }
-
-  // gettingTotalNumber(stackURL, lang, returnValue());
-
-
-  // return gettingTotalNumber(stackURL, lang);
-
-
-
-  // var options = {
-  //   url: stackURL,
-  //   // encoding: 'utf-8',
-  //   'headers':
-  //   'Accept-Encoding': 'gzip',
-  // };
-  //
-  // Request({url:'http://localhost:8000/', 'headers': headers})
-  //       .pipe(zlib.createGunzip()) // unzip
-  //       .pipe(process.stdout);
-
-
-
-
 
 }
+
+// receives an array of github data, language name, and array index, and adds stack data to this language
+function getStackOverflowData(tempArray, lang, i){
+
+  return new Promise(function(resolve, reject) {
+    var time = timeForApi();
+    var stackURL = "https://api.stackexchange.com/2.2/questions/?filter=total&fromdate="+time+"&site=stackoverflow&tagged="+lang;
+    console.log("Stackoverflow URL: " + stackURL);
+
+    Request({url: stackURL, gzip: true}, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        var langStackQuestions = JSON.parse(body);
+        var total = langStackQuestions.total;
+        tempArray[i].questions = total + 1;
+        console.log("GETTING DATA FROM STACKOVERFLOW: SUCCEEDED :) [" + lang + " :"+ total + "]");
+        console.log("[3]request return:" + total);
+        // return total;
+        resolve(tempArray);
+      }
+      else if (error){
+        console.log(error);
+        // reject(Error(error));
+        tempArray[i].questions = Math.random() * 100 + 1;
+        tempArray[i].questions_num_is_random = true;
+        resolve(tempArray);
+      }
+      else {
+        console.log("GETTING DATA FROM STACKOVERFLOW: FAILED :( [" + lang + "]");
+        // reject(Error("GETTING DATA FROM STACKOVERFLOW: FAILED :( [" + lang + "]"));
+        tempArray[i].questions = Math.random() * 100 + 1;
+        tempArray[i].questions_num_is_random = true;
+        resolve(tempArray);
+      }
+    });
+  });
+
+}
+
+function getQuestionsPercent(array){
+
+  return new Promise(function(resolve, reject) {
+
+    var sumQuestions = 0;
+    for ( i = 0; i < array.length; i++){
+      if (array[i].questions){
+        sumQuestions = sumQuestions + array[i].questions;
+      }
+    }
+
+    for (i = 0; i < array.length; i++){
+      if (array[i].questions){
+        array[i].questions_percent = Math.round(array[i].questions / sumQuestions * 100);
+      }
+    }
+
+    console.log("total questions: " + sumQuestions);
+    console.log("[5]added questions percent. example for " + array[3].name + " = " + array[3].questions_percent);
+    console.log("printing from getQuestionsPercent: ");
+    console.log(array);
+    resolve(array);
+
+  });
+
+}
+
+function saveDataToDB(array){
+  console.log("this is the array on saveDataToDB:");
+  // array = JSON.stringify(array);
+  console.log(array);
+  Request.post({
+    url: cloudant_URL,
+    auth: {
+      user: cloudant_KEY,
+      pass: cloudant_PASSWORD
+    },
+    json: true,
+    body: array,
+    headers: {} ,
+  },
+  function (error, response, body){
+    if (response.statusCode == 201){
+      console.log("Saved!");
+      // res.json(array);
+    }
+    else{
+      console.log("Uh oh...");
+      console.log("Error: " + response.statusCode);
+      console.log(error);
+      // res.send("Something went wrong...");
+    }
+  });
+}
+
 
 // *************************
 // ROUTERS
 // *************************
+app.get('/', function(req, res){
+  res.render('index', {page: 'get all data'});
+});
+
+app.get('/circles', function(req, res){
+  res.render('index_circles', {page: 'get all data'});
+});
+
 app.get('/api/yesterday',function(req, res){
 
   var time = timeForApi();
-  var tempArray = [];
 
-  var options = {
-    url: "http://api.github.com/search/repositories?per_page=1000&sort=stars&q=+created:"+time,
-    headers: {
-      'User-Agent': 'best_language_web_app'
-      }
-  };
+  function sendBack(array){
+    console.log("[4]sending back data");
+    console.log(array);
+    dataArray.data = array;
+    dataArray.update_date = timeForApi();
+    res.json(dataArray);
+    saveDataToDB(dataArray);
+  }
 
-  Request(options, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var gitData = JSON.parse(body);
-      var repositories = gitData.items;
+  if (dataArray.update_date == time){
+    console.log("DATA ON THE SERVER IS UP-TO-DATE.");
+    res.json(dataArray);
+  }
+  else {
+    getGitHubData()
+    .then(function(array){var i = 0; return getStackOverflowData(array, array[i].name, i);})
+    .then(function(array){var i = 1; return getStackOverflowData(array, array[i].name, i);})
+    .then(function(array){var i = 2; return getStackOverflowData(array, array[i].name, i);})
+    .then(function(array){var i = 3; return getStackOverflowData(array, array[i].name, i);})
+    .then(function(array){var i = 4; return getStackOverflowData(array, array[i].name, i);})
+    .then(function(array){var i = 5; return getStackOverflowData(array, array[i].name, i);})
+    .then(function(array){var i = 6; return getStackOverflowData(array, array[i].name, i);})
+    .then(function(array){var i = 7; return getStackOverflowData(array, array[i].name, i);})
+    .then(function(array){var i = 8; return getStackOverflowData(array, array[i].name, i);})
+    .then(function(array){var i = 9; return getStackOverflowData(array, array[i].name, i);})
+    .then(function(array){return getQuestionsPercent(array);})
+    .then(function(array){sendBack(array);});
+  }
 
-      // counting number of new repositories per lnaguage
-      for (var i = 0; i < repositories.length; i++){
-        var language = repositories[i].language;
-        var exists = 0;
-        if (language === null){
-          continue;
-        }
+});
 
-        for (var n = 0; n < tempArray.length; n++) {
-          if (tempArray[n].name == language) {
-            tempArray[n].repos++;
-            exists = 1;
-            continue;
-          }
-        }
+app.get("/api/all", function(req, res){
 
-        if(exists === 0) {
-          tempArray.push({
-            name: language,
-            repos: 1
-          });
-        }
-      }
-
-      // summarizing github repos
-      var sumRepositories = 0;
-      for (i = 0; i < tempArray.length; i++){
-        sumRepositories = sumRepositories + tempArray[i].repos;
-      }
-
-      // calculating repos_percent
-      for (i = 0; i < tempArray.length; i++){
-        tempArray[i].repos_percent = Math.round(tempArray[i].repos / sumRepositories * 100);
-      }
-
-      // sorting the array
-      tempArray = tempArray.sort(compareForSort);
-
-      // done with github
-      console.log("GETTING DATA FROM GITHUB: SUCCEEDED. RECEIVED " + sumRepositories + " VALID RESULTS OUT OF " + repositories.length + ".");
-
-      // getting data from stackoverflow
-      var questions = 0;
-      // for (i = 0; i < tempArray.length; i++){
-
-
-
-      var a = function(tempArray){
-        console.log("[1]===starting to looopp======");
-        for (i = 0; i < 1; i++){
-          var lang = tempArray[i].name;
-          console.log("[2]lang is: " + lang);
-          // questions = requestStackoverflowAPI(lang, time, tempArray, i);
-          returnValue(res, tempArray, requestStackoverflowAPI(tempArray, lang, time, i));
-          console.log("[5]number of questions is: " + questions);
-          // tempArray[i].questions = questions; //// doing that inside requestStackoverflowAPI
-        }
-        // return tempArray;
-      };
-
-      var b = function(tempArray){
-        console.log('[6]this is the array before sending it: ');
-        console.log(tempArray);
-        res.json(tempArray);
-      };
-
-      b(tempArray, a(tempArray));
-      // setTimeout(b, 1000);
-
-
-      // // summing up the number of questions
-      // var sumQuestions = 0;
-      // for (i = 0; i < tempArray.length; i++){
-      //   sumQuestions = sumQuestions + tempArray[i].questions;
-      // }
-      //
-      // // calculating questions_percent
-      // for (i = 0; i < tempArray.length; i++){
-      //   tempArray[i].questions_percent = Math.round(tempArray[i].questions / sumQuestions * 100);
-      // }
-      //
-      // // returning data
-      // console.log("returning tempArray");
-      // res.json(tempArray);
-
-    }
-    else if (error){
-      console.error(error);
-      res.end();
-    }
-    else {
-      console.error("GETTING DATA FROM GITHUB: FAILED :(");
-      // return tempArray;
-      res.end();
-    }
-
-  });
-
+	Request.get({
+		url: cloudant_URL+"/_all_docs?include_docs=true",
+		auth: {
+			user: cloudant_KEY,
+			pass: cloudant_PASSWORD
+		},
+		json: true
+	},
+	function (error, response, body){
+		res.json(body);
+	});
 });
 
 app.get("*", function(req, res){
-	res.send('Sorry, there\'s nothing here.');
+	res.send('Ooops.. nothing here.');
 });
 
-app.listen(3000);
-console.log("App is served on localhost:3000");
+app.listen(3333);
+console.log("App is served on localhost:3333");
