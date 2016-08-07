@@ -14,6 +14,8 @@ app.engine('.html', require('ejs').__express);
 app.set('view engine', 'html');
 app.use(express.static( __dirname + '/public' ));
 
+var port = process.env.PORT || 3000;
+
 
 // *************************
 // TEMP DATABASE
@@ -313,5 +315,5 @@ app.get("*", function(req, res){
 	res.send('Ooops.. nothing here.');
 });
 
-app.listen(3333);
-console.log("App is served on localhost:3333");
+app.listen(port);
+console.log("App is served on localhost: " + port);
