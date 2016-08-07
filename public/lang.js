@@ -145,7 +145,8 @@ function getDataFromWikipedia(langObj){
       cover = a + b + c + d + e + f + g + h + ij + k + l + m + no;
 
       // EVENT LISTENER TO A CLICK ON THE BACKGROUND OF LANGUAGE_BOX
-      $(".container").append(cover);
+      $(".container").prepend(cover);
+      // addBooks(name);
 
 
     }
@@ -158,6 +159,12 @@ function getBooksFromAmazon(){
 
 function addDataToPage(){
 
+}
+
+function addBooks(lang) {
+  var query = 'amzn_assoc_default_search_phrase = "' + lang + 'programming";';
+  var script = '<script type="text/javascript">amzn_assoc_placement = "adunit0";amzn_assoc_search_bar = "false";amzn_assoc_tracking_id = "bestlanguag0a-20";amzn_assoc_search_bar_position = "top";amzn_assoc_ad_mode = "search";amzn_assoc_ad_type = "smart";amzn_assoc_marketplace = "amazon";amzn_assoc_region = "US";amzn_assoc_title = "Books from Amazon.com";' + query + 'amzn_assoc_default_category = "All";amzn_assoc_linkid = "3580d4690a8e1fb82f5569a299dce4ab";</script><script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US"></script>';
+  $(".youtube").append(script);
 }
 
 // function oldYouTube(){
