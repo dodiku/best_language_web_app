@@ -65,8 +65,8 @@ div.bar {
 
 .container {
   /*width: 1001px;*/
-  /*max-width: 1000px;*/
-  max-width: 90%;
+  max-width: 1000px;
+  /*max-width: 80%;*/
   margin: auto;
   position:relative;
   align-items: center;
