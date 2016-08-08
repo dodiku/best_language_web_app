@@ -53,11 +53,38 @@ function addDataToPage(array){
                   // .range(["rgba(199,227,249,0.5)", "rgba(255,0,0,0.5)"]);
                   // .range(["#ffffff","#28C2FF"]);
                   // .range(["#ffffff","#5ED1FF"]);
-                  .range(["#ffffff","#FFF07C"]);
+                  // .range(["#ffffff","#FFF07C"]);
+                  .range(["#ffffff","#FCFFAC"]);
+
+  var emojiScale = d3.scaleLinear()
+                  .domain([coldest, hottest])
+                  // .range(["rgba(199,227,249,0.5)", "rgba(255,0,0,0.5)"]);
+                  // .range(["#ffffff","#28C2FF"]);
+                  // .range(["#ffffff","#5ED1FF"]);
+                  .range([0,3]);
+
+
 
                   // .range(["white","gray","black"]);
+// </i>
 
   for (i = 0; i < array.length; i++){
+
+    var emojis = emojiScale((array[i].repos_percent * array[i].questions_percent));
+    emojis = Math.round(emojis);
+    console.log("number of emojis: " + emojis);
+
+    var emojToAppend = " ";
+
+    if (emojis === 0) {
+      emojToAppend = '<div style="width:14px;height:14px;display:inline-block"></div>';
+    }
+
+    for (var n=0;n<emojis;n++){
+        emojToAppend = emojToAppend + '<i class="em em-fire"></i>';
+    }
+    console.log("emojis to append: " + emojToAppend);
+
     var backColor = colorScale((array[i].repos_percent * array[i].questions_percent));
     // var languageBox = "<a style='color:#222;display:inline-block;' href='/" + array[i].name + "'><div style='background-color:'"+backColor+";'class="+"language_box"+">";
     // var languageBox = "<div class="+"language_box"+">";
@@ -66,7 +93,8 @@ function addDataToPage(array){
     languageBox = languageBox + '<span class="percent">'+array[i].repos_percent+'%</span></br>';
     languageBox = languageBox + '<span class="language_info">of new repositories on GitHub</span></br>';
     languageBox = languageBox + '<span class="percent">'+array[i].questions_percent+'%</span></br>';
-    languageBox = languageBox + '<span class="language_info">of new questions on Stackoverflow</span></br></div></a>';
+    languageBox = languageBox + '<span class="language_info">of new questions on Stackoverflow</span></br>';
+    languageBox = languageBox + emojToAppend + '</div></a>';
     $("#container").append(languageBox);
   }
 

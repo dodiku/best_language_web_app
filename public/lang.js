@@ -135,8 +135,10 @@ function getDataFromWikipedia(langObj){
       var g = '<div class="highlight_code_content">'+repoContent+'</div>';
       var h = '<div class="highlight_community_title ' + questionsTitleColor + '">'+questionsTitle+'</div>';
       var ij = '<div class="highlight_community_content">'+questionsContent+'</div>';
-      var k = '<div class="highlight_learn_title">START LEARNING TODAY</div>';
-      var l = '<div class="youtube" id="player"></div>';
+      // var k = '<div class="highlight_learn_title">START LEARNING TODAY</div>';
+      var k = '';
+      // var l = '<div class="youtube" id="player"></div>';
+      var l = '';
       var m = '</div>'; // closing highlight_body
       // var no = '</div>'; // closig highlight
       var no = ''; // closig highlight
@@ -146,7 +148,6 @@ function getDataFromWikipedia(langObj){
 
       // EVENT LISTENER TO A CLICK ON THE BACKGROUND OF LANGUAGE_BOX
       $(".container").prepend(cover);
-      // addBooks(name);
 
 
     }
@@ -159,12 +160,6 @@ function getBooksFromAmazon(){
 
 function addDataToPage(){
 
-}
-
-function addBooks(lang) {
-  var query = 'amzn_assoc_default_search_phrase = "' + lang + 'programming";';
-  var script = '<script type="text/javascript">amzn_assoc_placement = "adunit0";amzn_assoc_search_bar = "false";amzn_assoc_tracking_id = "bestlanguag0a-20";amzn_assoc_search_bar_position = "top";amzn_assoc_ad_mode = "search";amzn_assoc_ad_type = "smart";amzn_assoc_marketplace = "amazon";amzn_assoc_region = "US";amzn_assoc_title = "Books from Amazon.com";' + query + 'amzn_assoc_default_category = "All";amzn_assoc_linkid = "3580d4690a8e1fb82f5569a299dce4ab";</script><script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US"></script>';
-  $(".youtube").append(script);
 }
 
 // function oldYouTube(){
@@ -205,5 +200,5 @@ function addBooks(lang) {
 // logic begins
 // =============
 console.log("we're on " + language);
-var dataArray = getData();
+getData();
 // var dataObj = getSpecificLangObj(dataArray, language);

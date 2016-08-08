@@ -16,6 +16,8 @@ app.use(express.static( __dirname + '/public' ));
 
 var port = process.env.PORT || 3000;
 
+// amazon unique Associate ID = bestlanguag0a-20
+
 
 // *************************
 // TEMP DATABASE
