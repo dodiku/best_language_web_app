@@ -88,7 +88,7 @@ function addDataToPage(array){
     var backColor = colorScale((array[i].repos_percent * array[i].questions_percent));
     // var languageBox = "<a style='color:#222;display:inline-block;' href='/" + array[i].name + "'><div style='background-color:'"+backColor+";'class="+"language_box"+">";
     // var languageBox = "<div class="+"language_box"+">";
-    var languageBox = '<a style="color:#222;display:inline-block;" href="/' + array[i].name + '"><div style="background-color:'  + backColor + ';" class=language_box>';
+    var languageBox = '<a class="a_box" style="color:#222;display:inline-block;" href="/' + array[i].name + '"><div style="background-color:'  + backColor + ';" class=language_box>';
     languageBox = languageBox + '<span class="language_name">'+array[i].name+'</span></br>';
     languageBox = languageBox + '<span class="percent">'+array[i].repos_percent+'%</span></br>';
     languageBox = languageBox + '<span class="language_info">of new repositories on GitHub</span></br>';
