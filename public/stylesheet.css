@@ -132,7 +132,7 @@ div.bar {
 
 .footer_text {
   line-height: 60px;
-  font-size: 14px;
+  font-size: 13px;
   font-family: 'Lato', sans-serif;
   font-weight: 300;
 }
@@ -148,19 +148,19 @@ div.bar {
   top: 0;
   left:0;
   bottom: 0;
-  /*text-align: center;*/
+  text-align: center;
 }
 
 .big_language_box {
-  width: 90%;
+  /*width: 90%;*/
   /*height: 344px;*/
   margin: 0% auto auto auto;
   /*background: #F6F6F6;*/
   /*border: 1px solid #979797;*/
   border-radius: 3px;
   display: block;
-  padding-left: 36px;
-  padding-right: 36px;
+  /*padding-left: 36px;
+  padding-right: 36px;*/
   padding-top: 32px;
   /*box-shadow: 4px 4px 2px 0px rgba(0,0,0,0.25);*/
   z-index: 100;
@@ -173,13 +173,13 @@ div.bar {
 
 .highlight_code_content{
   text-align: left;
-  padding-left: 5%;
+  /*padding-left: 5%;*/
   margin-bottom: 12px;
 }
 
 .highlight_community_content{
   text-align: left;
-  padding-left: 5%;
+  /*padding-left: 5%;*/
 }
 
 .books{
@@ -202,11 +202,11 @@ div.bar {
   font-size: 18px;
   padding-top: 16px;
   padding-bottom: 16px;
-  padding-left: 12px;
-  width: 285px;
+  /*padding-left: 12px;*/
+  width: 240px;
   margin-bottom: 12px;
   margin-top: 36px;
-  margin-left: 5%;
+  /*margin-left: 5%;*/
 }
 
 .highlight_green {
@@ -215,11 +215,11 @@ div.bar {
   font-size: 18px;
   padding-top: 16px;
   padding-bottom: 16px;
-  padding-left: 12px;
-  width: 285px;
+  /*padding-left: 12px;*/
+  width: 240px;
   margin-bottom: 12px;
   margin-top: 36px;
-  margin-left: 5%;
+  /*margin-left: 5%;*/
 }
 
 .highlight_learn_title {
@@ -267,6 +267,10 @@ div.bar {
   border-width: 1px;
   border-radius: 2px;
   border-color: #8C8C8C;
+  margin: 36px;
+  margin-top: 0px;
+  position: absolute;
+  right: 0;
 }
 
 .close:hover{
@@ -288,7 +292,7 @@ div.bar {
   display: inline-block;
   /*margin-left: 12px;*/
   /*margin-right: 24px;*/
-  /*float: right;*/
+  float: left;
 }
 
 .text {
