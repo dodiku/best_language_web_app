@@ -67,8 +67,9 @@ div.bar {
 
 .container {
   /*width: 1001px;*/
-  /*max-width: 1000px;*/
-  width: 90%;
+  /*width: 90%;*/
+  max-width: 1000px;
+  /*max-width: 80%;*/
   margin: auto;
   position:relative;
   align-items: center;
@@ -76,8 +77,7 @@ div.bar {
 }
 
 .language_box {
-  /*width: 250px;*/
-  width:100%;
+  width: 256px;
   height: 184px;
   background-color: #fff;
   border: 1px solid #eee;
@@ -87,10 +87,10 @@ div.bar {
   text-align: center;
 }
 
-.a_box {
+/*.a_box {
   min-width:18em;
   margin: 6px;
-}
+}*/
 
 .language_box:hover {
   background: #A9FBD7;
