@@ -29,7 +29,7 @@ h2 {
 footer {
   position: absolute;
   left:0;
-  height: 85px;
+  min-height: 85px;
   width: 100%;
   margin-top: 48px;
   font-family: 'Lato', sans-serif;
