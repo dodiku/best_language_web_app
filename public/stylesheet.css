@@ -1,4 +1,6 @@
-
+* {
+  box-sizing: border-box;
+}
 body {
   /*font-family: 'Raleway', sans-serif;*/
   font-family: 'Lato', sans-serif;
@@ -86,7 +88,7 @@ div.bar {
 }
 
 .a_box {
-  width:18em;
+  min-width:18em;
   margin: 6px;
 }
 
