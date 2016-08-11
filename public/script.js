@@ -248,7 +248,7 @@ function drawData (dataArray){
 
                         var wikipedia = "";
                         var wiki_url = "";
-                        var problematicNames = ["c++","go","swift","java","python","scala","ruby","haskell","erlang","elm","perl","bash","r"];
+                        var problematicNames = ["c++","go","swift","java","python","scala","ruby","haskell","erlang","elm","perl","bash","r","c"];
                         var lowerCaseName = name.toLowerCase();
 
                         if (lowerCaseName == "javascript"){
@@ -264,7 +264,7 @@ function drawData (dataArray){
                         }
 
                         else if (problematicNames.indexOf(lowerCaseName) > -1) {
-                          url = "https://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=" + name + "%20(programming%20language)";
+                          url = "https://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=" + name + "_(programming_language)";
                         }
 
                         else {
@@ -439,7 +439,7 @@ function drawData (dataArray){
 
                       var wikipedia = "";
                       var wiki_url = "";
-                      var problematicNames = ["c++","go","swift","java","python"];
+                      var problematicNames = ["c++","go","swift","java","python","scala","ruby","haskell","erlang","elm","perl","bash","r","c"];
                       var lowerCaseName = name.toLowerCase();
 
                       if (lowerCaseName == "javascript"){
