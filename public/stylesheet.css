@@ -29,13 +29,14 @@ h2 {
 footer {
   position: absolute;
   left:0;
-  height: 60px;
+  height: 85px;
   width: 100%;
   margin-top: 48px;
   font-family: 'Lato', sans-serif;
   font-weight: 300;
   color:white;
   padding-left: 12px;
+  padding-right: 12px;
   background-color: #979797;
 
 }
@@ -131,7 +132,7 @@ div.bar {
 }
 
 .footer_text {
-  line-height: 60px;
+  line-height: 85px;
   font-size: 13px;
   font-family: 'Lato', sans-serif;
   font-weight: 300;
@@ -303,4 +304,9 @@ div.bar {
   margin-top: 48px;
   font-size: 18px;
   /*font-weight: 700;*/
+}
+
+.circles{
+  float:right;
+  padding: 3px;
 }
