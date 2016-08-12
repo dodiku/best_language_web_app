@@ -166,8 +166,7 @@ function getGitHubData(url){
 
         var gitData = JSON.parse(body);
         var repositories = gitData.items;
-        var countMax = langNum;
-        var countActual = 1;
+        var sumRepositories = 0;
 
         // counting number of new repositories per lnaguage
         for (var i = 0; i < repositories.length; i++){
@@ -175,6 +174,12 @@ function getGitHubData(url){
           var exists = 0;
 
           if (language === null){
+            // sumRepositories++;
+            continue;
+          }
+
+          if (language.toLowerCase() === "css" || language.toLowerCase() === "html"){
+            sumRepositories++;
             continue;
           }
 
@@ -196,7 +201,7 @@ function getGitHubData(url){
         }
 
         // summarizing github repos
-        var sumRepositories = 0;
+        // var sumRepositories = 0;
         for (i = 0; i < tempArray.length; i++){
           sumRepositories = sumRepositories + tempArray[i].repos;
         }
