@@ -70,6 +70,10 @@ function addDataToPage(array){
 
   for (i = 0; i < array.length; i++){
 
+    if (array[i].repos_percent === 0){
+      continue;
+    }
+
     var emojis = emojiScale((array[i].repos_percent * array[i].questions_percent));
     emojis = Math.round(emojis);
     console.log("number of emojis: " + emojis);

@@ -13,6 +13,20 @@ function getData(){
       console.log("Got the data from the server:");
       data = data.data;
       console.log(data);
+
+      var noZerosArray = [];
+      var n = 0;
+      for (var i=0;i<data.length;i++){
+        if (data[i].repos_percent === 0) {
+          continue;
+        }
+        else{
+          noZerosArray[n] = data[i];
+          n++;
+        }
+      }
+      data=noZerosArray;
+
       drawData(data);
       // addDataToPage(data);
     }
@@ -107,7 +121,7 @@ function drawData (dataArray){
     var width = 1000;
     // calculating height
     var height = 0;
-    for (i=0; i < 10; i++){
+    for (i=0; i < dataArray.length; i++){
       height = height + rScale(dataArray[i].repos_percent) * 2 + bScale(dataArray[i].questions_percent) * 2 + bScale(dataArray[i].questions_percent) * 2 + 30;
     }
     // var height = 3000;
