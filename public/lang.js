@@ -125,7 +125,7 @@ function getDataFromWikipedia(langObj){
 
 
       var a = '<div class="big_language_box">';
-      // var b = '<div class="close"><span>CLOSE</span></div>';
+      // var b = '<div class="close"><span>BACK</span></div>';
       var b = '';
       // var c = '<div class="highlight_header">' + name + '</div></br>';
       var c = '';
@@ -135,10 +135,10 @@ function getDataFromWikipedia(langObj){
       var g = '<div class="highlight_code_content">'+repoContent+'</div>';
       var h = '<div class="highlight_community_title ' + questionsTitleColor + '">'+questionsTitle+'</div>';
       var ij = '<div class="highlight_community_content">'+questionsContent+'</div>';
-      // var k = '<div class="highlight_learn_title">START LEARNING TODAY</div>';
-      var k = '';
-      // var l = '<div class="youtube" id="player"></div>';
-      var l = '';
+      var k = '<div class="highlight_learn_title">See if you like it:</div>';
+      // var k = '';
+      var l = '<div class="youtube" id="player"></div>';
+      // var l = '';
       var m = '</div>'; // closing highlight_body
       // var no = '</div>'; // closig highlight
       var no = ''; // closig highlight
@@ -149,52 +149,36 @@ function getDataFromWikipedia(langObj){
       // EVENT LISTENER TO A CLICK ON THE BACKGROUND OF LANGUAGE_BOX
       $(".container").prepend(cover);
 
+      // CALLING YOUTUBE API
+      if (name.toLowerCase() == "c#") {
+        name = "c+sharp";
+      }
 
+      var youTubeUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&order=viewCount&q=' + name + '+programming+tutorial&type=video&videoDefinition=high&key=AIzaSyCMD5hNscjNSoDwTZlftWw_BacsKrdOWtQ';
+      console.log("YouTube URL: "+youTubeUrl);
+
+      $.ajax({
+        url: youTubeUrl,
+        type:'GET',
+        dataType:'jsonp',
+        error: function(err){
+          console.log("Could not get video from YouTube :(");
+          console.log(err);
+        },
+        success: function(data){
+          console.log(data);
+          for (var i=0;i<2;i++){
+            console.log("videoId:");
+            var videoID = data.items[i].id.videoId;
+            console.log(videoID);
+            var youTubeFrame = '<iframe style="margin-right:12px; margin-bottom:12px;" width="240" height="160" src="https://www.youtube.com/embed/' + videoID + '"frameborder="0" allowfullscreen></iframe>';
+            $(".youtube").append(youTubeFrame);
+          }
+        },
+      });
     }
   });
 }
-
-function getBooksFromAmazon(){
-
-}
-
-function addDataToPage(){
-
-}
-
-// function oldYouTube(){
-//   // CALLING YOUTUBE API
-//   if (name.toLowerCase() == "c#") {
-//     name = "c+sharp";
-//   }
-//   youTubeUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&order=viewCount&q=' + name + '+programming+tutorial&type=video&videoDefinition=high&key=AIzaSyCMD5hNscjNSoDwTZlftWw_BacsKrdOWtQ';
-//
-//   console.log("YouTube URL: "+youTubeUrl);
-//   $.ajax({
-//     url: youTubeUrl,
-//     type:'GET',
-//     dataType:'jsonp',
-//     error: function(err){
-//       console.log("Could not get video from YouTube :(");
-//       console.log(err);
-//     },
-//     success: function(data){
-//       console.log(data);
-//       console.log("videoId:");
-//       var videoID = data.items[0].id.videoId;
-//       console.log(videoID);
-//
-//       var youTubeFrame = '<iframe width="300" height="170" src="https://www.youtube.com/embed/' + videoID + '"frameborder="0" allowfullscreen></iframe>';
-//       $(".youtube").append(youTubeFrame);
-//
-//     },
-//
-//   });
-//
-//   $(".close").click(function(){
-//     $(".highlight").remove();
-//   });
-// }
 
 // =============
 // logic begins

@@ -379,12 +379,13 @@ function drawData (dataArray){
                               },
                               success: function(data){
                                 console.log(data);
-                                console.log("videoId:");
-                                var videoID = data.items[0].id.videoId;
-                                console.log(videoID);
-
-                                var youTubeFrame = '<iframe width="300" height="170" src="https://www.youtube.com/embed/' + videoID + '"frameborder="0" allowfullscreen></iframe>';
-                                $(".youtube").append(youTubeFrame);
+                                for (var i=0;i<3;i++){
+                                  console.log("videoId:");
+                                  var videoID = data.items[i].id.videoId;
+                                  console.log(videoID);
+                                  var youTubeFrame = '<iframe style="margin-right:10px;" width="300" height="170" src="https://www.youtube.com/embed/' + videoID + '"frameborder="0" allowfullscreen></iframe>';
+                                  $(".youtube").append(youTubeFrame);
+                                }
 
                               },
 

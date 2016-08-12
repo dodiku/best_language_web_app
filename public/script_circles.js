@@ -300,7 +300,7 @@ function drawData (dataArray){
                             var h = '<div class="highlight_community_title ' + questionsTitleColor + '">'+questionsTitle+'</div>';
                             var ij = '<div class="highlight_community_content">'+questionsContent+'</div>';
                             var k = '<div class="highlight_learn_title">START LEARNING TODAY</div>';
-                            var l = '<div class="youtube" id="player"></div>';
+                            var l = '<div class="youtube youtube_circles" id="player"></div>';
                             var m = '</div>'; // closing highlight_body
                             var no = '</div>'; // closig highlight
                             // </div>
@@ -327,12 +327,15 @@ function drawData (dataArray){
                               },
                               success: function(data){
                                 console.log(data);
-                                console.log("videoId:");
-                                var videoID = data.items[0].id.videoId;
-                                console.log(videoID);
 
-                                var youTubeFrame = '<iframe width="300" height="170" src="https://www.youtube.com/embed/' + videoID + '"frameborder="0" allowfullscreen></iframe>';
-                                $(".youtube").append(youTubeFrame);
+                                for (var i=0;i<3;i++){
+                                  console.log("videoId:");
+                                  var videoID = data.items[i].id.videoId;
+                                  console.log(videoID);
+                                  var youTubeFrame = '<iframe style="margin-right:10px;" width="300" height="170" src="https://www.youtube.com/embed/' + videoID + '"frameborder="0" allowfullscreen></iframe>';
+                                  $(".youtube").append(youTubeFrame);
+                                }
+
 
                               },
 
