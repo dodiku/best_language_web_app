@@ -118,8 +118,8 @@ function getGitHubDataFirstTime(){
         // return tempArray;
         var gitObj = {
           // array: tempArray,
-          // number_of_pages: lastPageNumber,
-          number_of_pages: 2,
+          number_of_pages: lastPageNumber,
+          // number_of_pages: 2,
           // time: time,
           url: url,
         };
@@ -143,128 +143,6 @@ function getGitHubDataFirstTime(){
 
 }
 
-function getAllGitHubData(gitObj){
-  console.log("we're in getAllGitHubData");
-  console.log(gitObj);
-  var numberOfPages = gitObj.number_of_pages;
-  var url = gitObj.url;
-  var tempArray = [];
-  var arrayOfPromises = [];
-
-  // var array = getGitHubData(url);
-  // console.log("printing array");
-  // console.log(array);
-
-
-  // for (var i = 0; i < numberOfPages ; i++){
-  for (var i = 0; i < 3 ; i++){
-
-    var PageUrl = url + "&page=" + (i + 1);
-    console.log("running for loop on getAllGitHubData");
-    console.log(PageUrl);
-
-    gitPromise(PageUrl,tempArray)
-    // .then(function(array){
-    //   tempArray.push(array);
-    //   return Promise.resolve(tempArray);
-    // });
-    .then(function(array){
-      tempArray = array;
-      return Promise.resolve(tempArray);
-    })
-    .then(function(array){
-      count = count + 1;
-      console.log("updateing count: " + count);
-      console.log(array);
-    });
-
-
-    // if (i=2){
-    //
-    // }
-
-    // getGitHubData(PageUrl).then()
-    // arrayOfPromises.push(function(tempArray){
-    //   var array = getGitHubData(PageUrl);
-    //   console.log(array);
-    //
-    //   return Promise.resolve(tempArray);});
-
-
-      // function(tempArray){
-      // // tempArray.push(function(){return Promise.resolve(getGitHubData(url));});
-      // tempArray.push(function(){return Promise.resolve([1,2,3]);});
-      // return Promise.resolve(tempArray);
-    // });
-  }
-  // console.log("array of promises");
-  // console.log(arrayOfPromises);
-
-
-  //////////// ****************
-  //////////// ****************
-  //////////// ****************
-  // arrayOfPromises.reduce(function (prev, curr) {
-  //     return prev.then(curr);
-  // }, Promise.resolve([])).then(function(total){
-  //   console.log("NOW WHAT??...  CREATE A SINGLE ARRAY AND RETURN IT");
-  //   console.log(total);
-  // });
-  //////////// ****************
-  //////////// ****************
-  //////////// ****************
-
-
-  // return new Promise(function(resolve, reject) {
-  //   var arrayOfPromises = [];
-  //   console.log("i'm on getallgithubdata");
-  //
-  //   if (numberOfPages > 10) {
-  //     numberOfPages = 8;
-  //   }
-  //
-  //
-  //
-  //   console.log(arrayOfPromises);
-  //   Promise.all(function(){
-  //   console.log(arrayOfPromises);
-  //   return arrayOfPromises;
-  //   })
-  //   .then(function(value){
-  //     console.log(value);
-  //     resolve(value);
-  //   });
-  //
-  // });
-
-  /////
-//
-//   var myAsyncFuncs = [
-//     function (val) {return Promise.resolve(val + 1);},
-//     function (val) {return Promise.resolve(val + 2);},
-//     function (val) {return Promise.resolve(val + 3);},
-// ];
-//
-// myAsyncFuncs.reduce(function (prev, curr) {
-//     return prev.then(curr);},
-//     Promise.resolve(1))
-// .then(function (total) {
-//     console.log('RESULT is ' + total);  // prints "RESULT is 7"
-// });
-
-
-  ////
-
-
-
-
-}
-
-function gitPromise(PageUrl, tempArray){
-  var array = getGitHubData(PageUrl, tempArray);
-  return Promise.resolve(array);
-}
-
 // returns an object (ex. array) with github data and number of pages from github api
 function getGitHubData(url){
 // function getGitHubData(){
@@ -285,30 +163,7 @@ function getGitHubData(url){
 
     Request(options, function (error, response, body) {
       if (!error && response.statusCode == 200) {
-        var headers = response.headers;
-        // var nextLink = 0;
-        var lastPageNumber = 0;
 
-        // geting the total number of pages
-        // if (headers.link.search('rel="last"') > 0){
-        //   // console.log("there are more pages");
-        //   // nextLink = headers.link.substring(1, headers.link.indexOf('>'));
-        //
-        //   lastPageNumber = headers.link;
-        //   var CutFrom = lastPageNumber.indexOf('rel="last"');
-        //   CutFrom = CutFrom - 10;
-        //   var CutTo = lastPageNumber.length;
-        //   lastPageNumber = lastPageNumber.slice(CutFrom,CutTo);
-        //   // console.log(lastPageNumber);
-        //
-        //   CutFrom = 4;
-        //   lastPageNumber = lastPageNumber.substring(5, lastPageNumber.indexOf('>'));
-        //   console.log(lastPageNumber);
-        //
-        // }
-        // else {
-        //   console.log("no more pages");
-        // }
         var gitData = JSON.parse(body);
         var repositories = gitData.items;
         var countMax = langNum;
@@ -340,25 +195,10 @@ function getGitHubData(url){
 
         }
 
-        // sorting the array
-        tempArray = tempArray.sort(compareForSort);
-
-        //triming the array according to langNum
-        // var trimmedArray = [];
-        // for (i=0;i<langNum;i++){
-        //   trimmedArray[i] = tempArray[i];
-        // }
-        // tempArray=trimmedArray;
-
         // summarizing github repos
         var sumRepositories = 0;
         for (i = 0; i < tempArray.length; i++){
           sumRepositories = sumRepositories + tempArray[i].repos;
-        }
-
-        // calculating repos_percent
-        for (i = 0; i < tempArray.length; i++){
-          tempArray[i].repos_percent = Math.round(tempArray[i].repos / sumRepositories * 100);
         }
 
         // done with github
@@ -517,8 +357,8 @@ app.get('/api/yesterday',function(req, res){
       var url = obj.url;
       var pages = obj.number_of_pages;
       var array = [];
-      for (var i=1;i<(pages+1);i++){
-        array[i] = url + "&page=" + i;
+      for (var i=0;i<pages;i++){
+        array[i] = url + "&page=" + (i+1);
       }
       console.log("array of pages numbers:");
       console.log(array);
@@ -530,13 +370,13 @@ app.get('/api/yesterday',function(req, res){
     .then(function(array){
       console.log("this is the array on the 2nd .then:");
 
-      var singleArray = array[1];
+      var singleArray = array[0];
 
       console.log("090909090===========BEFORE============");
       console.log(singleArray);
 
 
-      for (var num=2;num<(array.length);num++){
+      for (var num=1;num<(array.length);num++){
         var smallArray = array[num];
         for (var i = 0 ; i < smallArray.length ; i++){
           var language = smallArray[i].name;
@@ -597,8 +437,6 @@ app.get('/api/yesterday',function(req, res){
       return Promise.resolve(singleArray);
 
     })
-    // .then(function(object){return getAllGitHubData(object);})
-    // .then(...make array...)
     .then(function(array){var i = 0; return getStackOverflowData(array, array[i].name, i);})
     .then(function(array){var i = 1; return getStackOverflowData(array, array[i].name, i);})
     .then(function(array){var i = 2; return getStackOverflowData(array, array[i].name, i);})
