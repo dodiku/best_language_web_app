@@ -38,7 +38,7 @@ footer {
   padding-left: 12px;
   padding-right: 12px;
   background-color: #979797;
-
+  text-align: center;
 }
 
 /* --- clean footer --- */
@@ -132,10 +132,11 @@ div.bar {
 }
 
 .footer_text {
-  line-height: 85px;
+  line-height: 64px;
   font-size: 13px;
   font-family: 'Lato', sans-serif;
   font-weight: 300;
+  display: block;
 }
 
 .highlight {
@@ -307,6 +308,8 @@ div.bar {
 }
 
 .circles{
-  float:right;
+  /*float:right;*/
   padding: 3px;
+  display: inline-block;
+  margin-top: 32px;
 }
