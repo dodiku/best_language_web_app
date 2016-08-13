@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>What is the best programming language?</title>
+        <meta charset = "UTF-8" />
+        <meta name="viewport" content="width=device-width">
+        <link href="https://fonts.googleapis.com/css?family=Raleway:700,300|Lato:300,700" rel="stylesheet">
+        <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+        <link type="text/css" rel="stylesheet" href="stylesheet.css"/>
+        <link type="text/css" rel="stylesheet" href="prism.css"/>
+        <link rel="shortcut icon" type="image/png" href="https://afeld.github.io/emoji-css/emoji/crystal_ball.png">
+
+
+    </head>
+
+    <body>
+
+      <h1>Enjoy the data :)</h1>
+      <h2>Simple API. Single Endpoint.<br>
+      Don't forget to tell me about your new project at <a href="http://twitter.com/drorayalon" target="_blank">@drorayalon</a> <img style="height: 18px;padding-top: 6px;" src="/images/twitter.svg"></h2>
+
+      <div class="code_example">
+        <br>
+        <br>
+        Use this URL to get a JSON with data about yesterday's programming activity:
+      <pre class="snippet"><code class="language-html">http://bestlanguage.herokuapp.com/api/yesterday</code></pre><br>
+
+        The response will look something like that:
+      <pre class="snippet"><code class="language-json">{"update_date":"2016-08-11",
+        "data":[{"name":"JavaScript",
+                 "repos":201,
+                 "repos_percent":26,
+                 "questions":57,
+                 "questions_percent":12},
+
+                 {"name":"Python",
+                 "repos":94,
+                 "repos_percent":12,
+                 "questions":30,
+                 "questions_percent":7},
+                 .
+                 .
+                 .
+                 ]}</code></pre>
+
+<br>
+<br>
+<b>Let's break it down.</b>
+<br>
+<br>
+The JSON includes 2 elements:
+<ol>
+  <li><b>"update_date" - </b>Holds a string of the date on which the data was collected for.</li>
+  <li><b>"data" - </b>An array of objects. Each objects holds data on specific language.</li>
+</ol>
+<br>
+<br>
+<b>Understanding the "data".</b>
+<br>
+<br>
+<pre class="snippet"><code class="language-json">"name":"JavaScript"</code></pre>
+The name of the programming language.
+<br>
+<br>
+<br>
+<pre class="snippet"><code class="language-json">"repos":201</code></pre>
+The percentage of new repositories out of the total number of new repositories on GitHub.
+<br>
+<br>
+<br>
+<pre class="snippet"><code class="language-json">"repos_percent":26</code></pre>
+The number of new repositories that were created on GitHub using this language, on "update_date".
+<br>
+<br>
+<br>
+<br>
+<pre class="snippet"><code class="language-json">"questions":57</code></pre>
+The number of new questions about this language that were handled on Stackoverflow, on "update_date".
+<br>
+<br>
+<br>
+<pre class="snippet"><code class="language-json">"questions_percent":12</code></pre>
+The percentage of new questions out of the total number of new questions on Stackoverflow.
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+      </div>
+      <script src="prism.js"></script>
+
+      <footer>
+        <a href="/"><img class="circles" src="/images/rectangles.svg"></a>
+        <a href="/circles"><img class="circles" src="/images/circles.svg"></a>
+          <div class="api_footer_text">Data is meant to be recycled - <a href="/api"><div class="api_button">Use the API</div></a></div>
+        <span class="footer_text">Built and designed by <a class="footer" href="http://www.linkedin.com/in/drorayalon" target= _blank>Dror Ayalon</a> <a href="http://itp.nyu.edu" target= _blank><i class="em em-purple_heart"></i></a>, August 2016.</span>
+      </footer>
+
+    </body>
+
+</html>

@@ -336,6 +336,10 @@ app.get('/circles', function(req, res){
   res.render('index_circles', {page: 'get all data'});
 });
 
+app.get("/api", function(req, res){
+  res.render('api');
+});
+
 app.get('/api/yesterday',function(req, res){
 
   var time = timeForApi();
