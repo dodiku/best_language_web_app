@@ -97,7 +97,7 @@ function addDataToPage(array){
     languageBox = languageBox + '<span class="percent">'+array[i].repos_percent+'%</span></br>';
     languageBox = languageBox + '<span class="language_info">of new repositories on GitHub</span></br>';
     languageBox = languageBox + '<span class="percent">'+array[i].questions_percent+'%</span></br>';
-    languageBox = languageBox + '<span class="language_info">of new questions on Stackoverflow</span></br>';
+    languageBox = languageBox + '<span class="language_info">of new questions on StackOverflow</span></br>';
     languageBox = languageBox + emojToAppend + '</div></a>';
     $("#container").append(languageBox);
   }

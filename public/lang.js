@@ -121,7 +121,7 @@ function getDataFromWikipedia(langObj){
       var repoContent = "Since yesterday, <b>" + langObj.repos_percent + "% of all new repositories</b> on GitHub were written in " + langObj.name+".";
 
       // creating content for community
-      var questionsContent = "Since yesterday, <b>" + langObj.questions_percent + "% of all questions handled</b> on Stackoverflow were related to " + langObj.name+".";
+      var questionsContent = "Since yesterday, <b>" + langObj.questions_percent + "% of all questions handled</b> on StackOverflow were related to " + langObj.name+".";
 
 
       var a = '<div class="big_language_box">';
