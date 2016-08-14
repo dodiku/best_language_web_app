@@ -46,7 +46,7 @@ function addDataToPage(array){
     languageBox = languageBox + '<span class="percent">'+array[i].repos_percent+'%</span></br>';
     languageBox = languageBox + '<span class="language_info">of new repositories on GitHub</span></br>';
     languageBox = languageBox + '<span class="percent">'+array[i].questions_percent+'%</span></br>';
-    languageBox = languageBox + '<span class="language_info">of new questions on Stackoverflow</span></br></div></a>';
+    languageBox = languageBox + '<span class="language_info">of new questions on StackOverflow</span></br></div></a>';
     $("#container").append(languageBox);
   }
 
@@ -287,7 +287,7 @@ function drawData (dataArray){
                             var repoContent = "Since yesterday, <b>" + dataArray[i].repos_percent + "% of all new repositories</b> on GitHub were written in " + dataArray[i].name+".";
 
                             // creating content for community
-                            var questionsContent = "Since yesterday, <b>" + dataArray[i].questions_percent + "% of all questions handled</b> on Stackoverflow were related to " + dataArray[i].name+".";
+                            var questionsContent = "Since yesterday, <b>" + dataArray[i].questions_percent + "% of all questions handled</b> on StackOverflow were related to " + dataArray[i].name+".";
 
 
                             var a = '<div class="highlight"><div class="big_language_box">';
@@ -481,7 +481,7 @@ function drawData (dataArray){
                           var repoContent = "Since yesterday, <b>" + dataArray[i].repos_percent + "% of all new repositories</b> on GitHub were written in " + dataArray[i].name+".";
 
                           // creating content for community
-                          var questionsContent = "Since yesterday, <b>" + dataArray[i].questions_percent + "% of all questions handled</b> on Stackoverflow were related to " + dataArray[i].name+".";
+                          var questionsContent = "Since yesterday, <b>" + dataArray[i].questions_percent + "% of all questions handled</b> on StackOverflow were related to " + dataArray[i].name+".";
 
 
                           var a = '<div class="highlight"><div class="big_language_box">';
