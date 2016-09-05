@@ -74,7 +74,7 @@ function compareForSort(a,b){
 function getGitHubDataFirstTime(){
   var time = timeForApi();
   var tempArray = [];
-  var url = "http://api.github.com/search/repositories?per_page=1000&sort=stars&q=+created:"+time;
+  var url = "https://api.github.com/search/repositories?sort=stars&per_page=1000&q=+created:>="+time;
 
   return new Promise(function(resolve, reject) {
 
@@ -83,7 +83,8 @@ function getGitHubDataFirstTime(){
       url: url,
       // url: "https://api.github.com/search/repositories?per_page=1000&sort=stars&q=+created%3A2016-08-10",
       headers: {
-        'User-Agent': 'best_language_web_app'
+        'User-Agent': 'best_language_web_app',
+        'Accept': 'application/vnd.github.v3+json',
         }
     };
 
