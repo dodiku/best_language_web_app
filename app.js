@@ -3,7 +3,6 @@ var app = express();
 var logger = require('morgan');
 var Request = require('request');
 
-// this is a comment
 // *************************
 // CONFIGURATIONS
 // *************************
