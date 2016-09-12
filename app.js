@@ -43,7 +43,8 @@ var cloudant_URL = "https://" + cloudant_USER + ".cloudant.com/" + cloudant_DB;
 // returning a string that represnts time in the correct format for API calls
 function timeForApi(){
   var yesterday = new Date();
-  var dd = yesterday.getDate()-1; //today - 1 = yesterday
+  yesterday.setDate(yesterday.getDate()-1);
+  var dd = yesterday.getDate();
   var mm = yesterday.getMonth()+1; //January is 0!
   var yyyy = yesterday.getFullYear();
 
